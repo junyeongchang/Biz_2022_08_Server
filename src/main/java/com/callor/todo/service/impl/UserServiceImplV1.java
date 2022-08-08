@@ -1,16 +1,27 @@
 package com.callor.todo.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.callor.todo.model.AuthorityVO;
 import com.callor.todo.model.UserVO;
+import com.callor.todo.persistance.UserDao;
 import com.callor.todo.service.UserService;
 
 @Service("userServiceV1")
 public class UserServiceImplV1 implements UserService{
 	
+	@Autowired
+	private UserDao userDao;
+	
+	@Autowired
+	@Qualifier("passwordEncoder")
+	private PasswordEncoder passwordEncoder;
 	
 	@Override
 	public void create_user_table() {
@@ -36,12 +47,28 @@ public class UserServiceImplV1 implements UserService{
 
 	@Override
 	public UserVO findById(String id) {
-		return null;
+		return userDao.findById(id);
 	}
 
 	@Override
 	public int insert(UserVO vo) {
-		return 0;
+		List<UserVO> users = userDao.selectAll();
+		List<AuthorityVO> auths = new ArrayList<>();
+		
+		if(users == null || users.size() < 1) {
+			vo.setEnabled(true);
+			auths.add(AuthorityVO.builder().username(vo.getUsername()).authority("ROLE_ADMIN").build());
+			auths.add(AuthorityVO.builder().username(vo.getUsername()).authority("ROLE_USER").build());
+		} else {
+			auths.add(AuthorityVO.builder().username(vo.getUsername()).authority("ROLE_USER").build());
+		}
+		
+		String encPassword = passwordEncoder.encode(vo.getPassword());
+		vo.setPassword(encPassword);
+		
+		userDao.role_insert(auths);
+		
+		return userDao.insert(vo);
 		
 	}
 
