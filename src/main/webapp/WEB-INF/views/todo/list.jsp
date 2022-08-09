@@ -12,7 +12,7 @@
 <script>
 	const rootPath = "${rootPath}"
 </script>
-<script src="${rootPath}/static/js/todo.js?ver=2022-08-08-001"></script>
+<script src="${rootPath}/static/js/todo.js?ver=2022-08-08-030"></script>
 </head>
 <body>
 	<h1>todo 리스트 화면</h1>
@@ -36,7 +36,10 @@
 				<td>${todo.t_todo}</td>
 				<td>${todo.t_date}</td>
 				<td>${todo.t_time}</td>
-				<td><button class="check">${todo.t_check}</button></td>
+				<td class="td-button">${todo.t_check}</td>
+				<!-- <td><a href="${rootPath}/todo/${todo.t_seq}/completion"><button type="button">${todo.t_check}</button></a></td> -->
+				<td>${todo.t_completion_date}</td>
+				<td>${todo.t_completion_time}</td>
 			</tr>
 		</c:forEach>
 	</table>

@@ -49,4 +49,10 @@ public class TodoServiceImplV1 implements TodoService{
 		return todoDao.delete(id);
 	}
 
+	@Override
+	public int updateCompletion(TodoVO todo) {
+		// TODO Auto-generated method stub
+		return todoDao.updateCompletion(todo);
+	}
+
 }

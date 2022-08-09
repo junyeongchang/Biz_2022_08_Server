@@ -51,7 +51,7 @@ div.w3-card-4 {
 			<div>
 				<a href="${rootPath}/todo/${TODO.t_seq}/update" class="w3-button modal-close">수정</a> <a
 					href="${rootPath}/todo/${TODO.t_seq}/delete" class="w3-button modal-close">삭제</a> <a
-					href="${rootPath}/todo/list" class="w3-button modal-close">리스트</a>
+					href="${rootPath}/todo/list" class="w3-button modal-close">리스트화면</a>
 			</div>
 		</div>
 	</div>

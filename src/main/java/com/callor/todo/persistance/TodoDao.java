@@ -4,4 +4,5 @@ import com.callor.todo.model.TodoVO;
 
 public interface TodoDao extends GenericDao<TodoVO, Long> {
 	public void create_user_table();
+	public int updateCompletion(TodoVO todo);
 }

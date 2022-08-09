@@ -11,7 +11,7 @@
  	</select>
  	<select id="selectAll" resultType="TodoVO">
  		select * from tbl_todoList
- 		order by t_date
+ 		order by t_date ASC, t_time ASC
  	</select>
  	<select id="findById" resultType="TodoVO">
  		select * from tbl_todoList
@@ -39,6 +39,13 @@
  			t_time = #{t_time},
  			t_todo = #{t_todo}
  			where  t_seq = #{t_seq}
+ 	</update>
+ 	<update id="updateCompletion" parameterType="TodoVO">
+ 		update tbl_todoList set
+ 			t_check = #{t_check},
+			t_completion_date = #{t_completion_date},
+			t_completion_time = #{t_completion_time}
+ 		where  t_seq = #{t_seq}
  	</update>
  	<delete id="delete">
  		delete from tbl_todoList

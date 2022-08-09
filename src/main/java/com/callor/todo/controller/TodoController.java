@@ -44,6 +44,53 @@ public class TodoController {
 		return "redirect:/todo/list";
 	}
 	
+	@RequestMapping(value = "/{seq}/update", method = RequestMethod.GET)
+	public String update(@PathVariable("seq") String seq, Model model) {
+		
+		TodoVO todo = todoService.findById(Long.valueOf(seq));
+		model.addAttribute("TODO",todo);
+		return "todo/input";
+	}
+	@RequestMapping(value = "/{seq}/update", method = RequestMethod.POST)
+	public String update(@PathVariable("seq") String seq,
+			@ModelAttribute("todo") TodoVO todoVO, Principal principal) {
+		
+		String username = principal.getName();
+		todoVO.setT_author(username);
+		
+		long m_seq = Long.valueOf(seq);
+		todoVO.setT_seq(m_seq);
+		todoVO.setT_check("미완료");
+		
+		todoService.update(todoVO);
+		
+		return String.format("redirect:/todo/%s/detail", seq);
+	}
+	
+	@RequestMapping(value = "/{seq}/completion", method = RequestMethod.GET)
+	public String completion(@PathVariable("seq") String seq, Model model) {
+	
+		TodoVO todo = todoService.findById(Long.valueOf(seq));
+		
+		Date date = new Date(System.currentTimeMillis());
+		SimpleDateFormat toDate = new SimpleDateFormat("yyy-MM-dd");
+		SimpleDateFormat toTime = new SimpleDateFormat("HH:mm:SS");
+		
+		log.debug(todo.getT_check()+"============================================================");
+		
+		if(todo.getT_check() == "미완료") {
+			todo.setT_check("완료");
+			todo.setT_completion_date(toDate.format(date));
+			todo.setT_completion_time(toTime.format(date));
+		} else {
+			todo.setT_check("미완료");
+			todo.setT_completion_date("");
+			todo.setT_completion_time("");
+		}
+		todoService.updateCompletion(todo);
+		return "redirect:/todo/list"; 
+	}
+	
 	@RequestMapping(value="/list", method=RequestMethod.GET)
 	public String list(Model model) {
 		List<TodoVO> todoList = todoService.selectAll();
